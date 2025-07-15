@@ -6,6 +6,7 @@ class Screen:
     def __init__(self, root: tk.Tk):
         self.root = root
         self.widgets: dict[str, Widget] = dict()
+        self.datas: dict[str, tk.Variable] = dict()
 
     def addWidget(self,tag: str, widget: Widget):
         self.widgets[tag] = widget
@@ -26,3 +27,9 @@ class Screen:
             print(e)
             e.widget.destroy()
         print(self.widgets.values())
+
+    def getData(self, tag: str):
+        return self.datas[tag]
+    
+    def setData(self, tag: str, value: Any):
+        self.datas[tag] = value
