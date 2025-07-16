@@ -1,9 +1,14 @@
-from screen import *
-from tkinter import Variable, IntVar, StringVar, colorchooser, Canvas, Frame # type: ignore
+from .screen import Screen
+from .widget import LabelWidget, EntryWidget, FrameWidget, ButtonWidget, CanvasWidget, StringVarLabelWidget, OptionMenuWidget #type: ignore
+from tkinter import Tk, Variable, IntVar, StringVar, colorchooser, Canvas, Frame, PhotoImage # type: ignore
+import animation
 
 def changeScreen(a: Screen, b: Screen):
     a.clearScreen()
     b.updateScreen()
+    animation.clear(canvas)
+    animation.ask_again(canvas, root, dog_img)
+    frame2.grid_remove()
 
 def openColorWindow(title: str, tag: str):
     shapeScreen.getData(tag).set(colorchooser.askcolor(title=title)[1]) # type: ignore
@@ -18,7 +23,7 @@ def sendSomething():
     print("SendingMessageidk")
 
 
-root= tk.Tk()
+root= Tk()
 
 nameScreen = Screen(root)
 shapeScreen = Screen(root)
@@ -26,8 +31,13 @@ shapeScreen = Screen(root)
 frame = Frame(root)
 frame.grid(row= 0, column= 0)
 
-frame2 = Frame(root)
-frame2.grid()
+frame2 = Frame(root, bg ="red")
+frame2.grid(row=0, column = 0)
+
+canvas = Canvas(root, width=500, height=500)
+canvas.grid(row= 0, column = 1)
+
+dog_img = PhotoImage(file="dog.gif").subsample(10, 10)
 
 nameScreen.addWidget("nameLabel", LabelWidget("Name: ").setPos(0, 0).setParent(frame2))
 
@@ -51,12 +61,12 @@ shapeScreen.addWidget("shapeFillColorLabel", LabelWidget("Select outline color: 
 shapeScreen.addWidget("shapeFillColorButton", ButtonWidget("Select", lambda : openColorWindow("test", "shapeFillColor")).setPos(2, 1).setParent(frame))
 shapeScreen.addWidget("shapeXLabel", LabelWidget("X: ").setPos(3, 0).setParent(frame))
 shapeScreen.addWidget("shapeXEntry", EntryWidget(shapeScreen.getData("shapeX")).setPos(3, 1).setParent(frame)) #type: ignore
-shapeScreen.addWidget("shapeYLabel", LabelWidget("Y: ").setPos(3, 3).setParent(frame))
-shapeScreen.addWidget("shapeYEntry", EntryWidget(shapeScreen.getData("shapeY")).setPos(3, 4).setParent(frame)) #type: ignore
+shapeScreen.addWidget("shapeYLabel", LabelWidget("Y: ").setPos(3, 2).setParent(frame))
+shapeScreen.addWidget("shapeYEntry", EntryWidget(shapeScreen.getData("shapeY")).setPos(3, 3).setParent(frame)) #type: ignore
 shapeScreen.addWidget("shapeSizeLabel", LabelWidget("Radius/Length: ").setPos(4, 0).setParent(frame))
 shapeScreen.addWidget("shapeSizeEntry", EntryWidget(shapeScreen.getData("shapeRadius")).setPos(4, 1).setParent(frame)) #type: ignore
 shapeScreen.addWidget("confirmButton", ButtonWidget("Confirm", sendSomething).setPos(5, 5).setParent(frame))
-shapeScreen.addWidget("testCanvas", CanvasWidget(500, 500, canvasTest).setPos(0, 1).setRoot(root))
+#shapeScreen.addWidget("testCanvas", CanvasWidget(500, 500, canvasTest).setPos(0, 1).setRoot(root))
 
 
 
@@ -80,4 +90,4 @@ shapeScreen.addWidget("testCanvas", CanvasWidget(500, 500, canvasTest).setPos(0,
 
 
 nameScreen.updateScreen()
-root.mainloop()
+#root.mainloop()

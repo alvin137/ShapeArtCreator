@@ -1,5 +1,5 @@
 import tkinter as tk
-from widget import *
+from .widget import *
 
 #Class for a screen
 class Screen:
