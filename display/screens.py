@@ -9,12 +9,13 @@ def changeScreen(a: Screen, b: Screen):
     global t
     a.clearScreen()
     b.updateScreen()
-    animation.clear(canvas) #type: ignore
-    animation.ask_again(canvas, root, dog_img) #type: ignore
+    animHandler.clear()
+    animHandler.ask_again()
+    #animation.ask_again(canvas, root, dog_img) #type: ignore
     frame2.grid_remove()
     #why removing
-    t = turtle.RawTurtle(canvas)
-    t.showturtle()
+    #t = turtle.RawTurtle(canvas)
+    #t.showturtle()
 
 def drawSomething():
     shape = shapeScreen.getData("shapeOption").get()#type: ignore
@@ -51,7 +52,11 @@ t = turtle.RawTurtle(canvas)
 t.speed(2)
 t.hideturtle()
 
-dog_img = PhotoImage(file="dog.gif").subsample(10, 10)
+dog_img = PhotoImage(file="dog.gif").subsample(10, 10) # type: ignore
+
+animHandler = animation.AnimationHandler(canvas, root, dog_img)
+
+animHandler.ask_name()
 
 nameScreen.addWidget("nameLabel", LabelWidget("Name: ").setPos(0, 0).setParent(frame2))
 

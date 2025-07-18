@@ -1,64 +1,80 @@
-## preparing
-def clear(canvas):
-    canvas.delete("all")
-    #screen.clear()
+from tkinter import Canvas, Tk, PhotoImage
 
-def show_speech(canvas, text, x, y, length):
-    bubble = canvas.create_rectangle(x-10, y-30, x+length, y, fill="white", outline="black", width=2)
-    label = canvas.create_text(x+5, y-15, text=text, anchor="w", font=("Arial", 14, "bold"))
-    return bubble, label
+class AnimationHandler:
+    def __init__(self, canvas: Canvas, root: Tk, dog_img: PhotoImage):
+        self.canvas = canvas
+        self.root = root
+        self.dog_img = dog_img
+        self.elements: list[int] = []
+
+    ## preparing
+    def clear(self):
+        for e in self.elements:
+            self.canvas.delete(e)
+
+    def show_speech(self, text: str, x: float, y: float, length: float):
+        bubble = self.canvas.create_rectangle(x-10, y-30, x+length, y, fill="white", outline="black", width=2)
+        label = self.canvas.create_text(x+5, y-15, text=text, anchor="w", font=("Arial", 14, "bold"))
+        return bubble, label
     
-def float_dog(canvas, root, dog_id, step=0):
-    if canvas.coords(dog_id):  
-        dy = 1 if step % 20 < 10 else -1
-        canvas.move(dog_id, 0, dy)
-        root.after(10, lambda: float_dog(canvas, root, dog_id, step + 1))
+    def float_dog(self, dog_id: int, step: int=0):
+        if self.canvas.coords(dog_id):  
+            dy = 1 if step % 20 < 10 else -1
+            self.canvas.move(dog_id, 0, dy)
+            self.root.after(10, lambda: self.float_dog(dog_id, step + 1))
 
-def float_title(canvas, root, title_id, step=0):
-    if canvas.coords(title_id):  
-        dy = 1.5 if step % 20 < 10 else -1.5
-        canvas.move(title_id, 0, dy)
-        root.after(100, lambda: float_title(canvas, root, title_id, step + 1))
+    def float_title(self, title_id: int, step: int=0):
+        if self.canvas.coords(title_id):  
+            dy = 1.5 if step % 20 < 10 else -1.5
+            self.canvas.move(title_id, 0, dy)
+            self.root.after(100, lambda: self.float_title(title_id, step + 1))
 
-##  main function
-def show_title(canvas, root):
-    title_id = canvas.create_text(
-        0, 0,
-        text="Shape Art Creator",
-        font=("Helvetica", 30, "bold"),
-        fill="black"
-    )
-    float_title(canvas, root, title_id)
-    return title_id
+    def create_dog(self):
+        dog_id = self.canvas.create_image(-100, 0, image=self.dog_img, anchor="center")
+        self.elements.append(dog_id)
+        return dog_id
 
-def ask_name(canvas, root, dog_img):
-    dog_id = canvas.create_image(-100, 0, image=dog_img, anchor="center")
-    show_speech(canvas, "What's your name?", -40, -50, 200)
-    float_dog(canvas, root, dog_id)
+    ##  main function
+    def show_title(self):
+        title_id = self.canvas.create_text(
+            0, 0,
+            text="Shape Art Creator",
+            font=("Helvetica", 30, "bold"),
+            fill="black"
+        )
+        self.float_title(title_id)
+        self.elements.append(title_id)
 
-def dance(canvas, root, dog_img, step=0):
-    if step == 0:
-        dog_id = canvas.create_image(-100, 0, image=dog_img, anchor="center")
-        dance.dog_id = dog_id
-    if step >= 100:
-        return
-    dx = 15 if step % 2 == 0 else -15
-    dy_cycle = step % 8
-    if dy_cycle in [0, 4]:
-        dy = -20
-    elif dy_cycle in [2, 6]:
-        dy = 20
-    else:
-        dy = 0
-    canvas.move(dance.dog_id, dx, dy)
-    root.after(20, lambda: dance(canvas, root, dog_img, step + 1))
-    
-def ask_again(canvas, root, dog_img):
-    dog_id = canvas.create_image(-100, 0, image=dog_img, anchor="center")
-    show_speech(canvas, "Draw another?", -40, -50, 200)
-    float_dog(canvas, root, dog_id)
+    def ask_name(self):
+        dog_id = self.create_dog()
+        self.elements += self.show_speech("What's your name?", -40, -50, 200)
+        self.float_dog(dog_id)
 
-def say_goodbye(canvas, root, dog_img):
-    dog_id = canvas.create_image(-100, 0, image=dog_img, anchor="center")
-    show_speech(canvas, "Thank you!", -40, -50, 150)
-    float_dog(canvas, root, dog_id)
+    def dance(self, step: int=0):
+        if step == 0:
+            dog_id = self.create_dog()
+            self.dog_id = dog_id
+        if step >= 100:
+            return
+        dx = 15 if step % 2 == 0 else -15
+        dy_cycle = step % 8
+        if dy_cycle in [0, 4]:
+            dy = -20
+        elif dy_cycle in [2, 6]:
+            dy = 20
+        else:
+            dy = 0
+        self.canvas.move(self.dog_id, dx, dy)
+        self.root.after(20, lambda: self.dance(step + 1))
+        
+    def ask_again(self):
+        dog_id = self.create_dog()
+        self.show_speech("Draw another?", -40, -50, 200)
+        self.float_dog(dog_id)
+
+    def say_goodbye(self):
+        dog_id = self.create_dog()
+        self.show_speech("Thank you!", -40, -50, 150)
+        self.float_dog(dog_id)
+
+        
