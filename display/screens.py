@@ -48,8 +48,8 @@ def drawSomething():
         draw_polygon(t, edges, radius, outline, fill, x, y) #type: ignore
 
     animHandler.dance()
-    root.after(1000, animHandler.clear)
-    root.after(1000, animHandler.ask_again)
+    root.after(2000, animHandler.clear)
+    root.after(2000, animHandler.ask_again)
 
 def openColorWindow(title: str, tag: str):
 
