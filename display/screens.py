@@ -47,7 +47,9 @@ def drawSomething():
         edges = 3 if shape == "Triangle" else 4 if shape == "Square" else 6
         draw_polygon(t, edges, radius, outline, fill, x, y) #type: ignore
 
-    animHandler.ask_again()
+    animHandler.dance()
+    root.after(1000, animHandler.clear)
+    root.after(1000, animHandler.ask_again)
 
 def openColorWindow(title: str, tag: str):
 
