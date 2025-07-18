@@ -8,7 +8,7 @@ from .drawing import *
 def changeToShapeScreen():
     changeScreen(nameScreen, shapeScreen)
     animHandler.clear()
-    animHandler.ask_again()
+    animHandler.ask_color()
     frame2.grid_remove()
     t.showturtle()
 
@@ -27,19 +27,30 @@ def changeScreen(a: Screen, b: Screen):
 def drawSomething():
     if t.isdown():
         return
+    animHandler.clear()
+
     shape = shapeScreen.getData("shapeOption").get()#type: ignore
     outline = shapeScreen.getData("shapeOutlineColor").get()#type: ignore
     fill = shapeScreen.getData("shapeFillColor").get()#type: ignore
     x = shapeScreen.getData("shapeX").get()#type: ignore
     y = shapeScreen.getData("shapeY").get()#type: ignore
     radius = shapeScreen.getData("shapeRadius").get() #type: ignore
+
+    if outline == "" or fill == "":
+        print("Need color")
+        animHandler.ask_color()
+        return
+    
     if shape == "Circle" : #type: ignore
         draw_circle(t, radius, outline, fill, x, y) #type: ignore
     else:
         edges = 3 if shape == "Triangle" else 4 if shape == "Square" else 6
         draw_polygon(t, edges, radius, outline, fill, x, y) #type: ignore
 
+    animHandler.ask_again()
+
 def openColorWindow(title: str, tag: str):
+
     initialColor = shapeScreen.getData(tag).get() # type: ignore
     shapeScreen.getData(tag).set(colorchooser.askcolor(title=title, color= initialColor)[1]) # type: ignore
 

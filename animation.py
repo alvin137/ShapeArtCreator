@@ -69,12 +69,17 @@ class AnimationHandler:
         
     def ask_again(self):
         dog_id = self.create_dog()
-        self.show_speech("Draw another?", -40, -50, 200)
+        self.elements += self.show_speech("Draw another?", -40, -50, 200)
+        self.float_dog(dog_id)
+
+    def ask_color(self):
+        dog_id = self.create_dog()
+        self.elements += self.show_speech("Please select color", -40, -50, 200)
         self.float_dog(dog_id)
 
     def say_goodbye(self):
         dog_id = self.create_dog()
-        self.show_speech("Thank you!", -40, -50, 150)
+        self.elements += self.show_speech("Thank you!", -40, -50, 150)
         self.float_dog(dog_id)
 
         
