@@ -110,6 +110,3 @@ shapeScreen.addWidget("shapeYEntry", EntryWidget(shapeScreen.getData("shapeY")).
 shapeScreen.addWidget("shapeSizeLabel", LabelWidget("Radius/Length: ").setPos(4, 0).setParent(frame))
 shapeScreen.addWidget("shapeSizeEntry", EntryWidget(shapeScreen.getData("shapeRadius")).setPos(4, 1).setParent(frame)) #type: ignore
 shapeScreen.addWidget("confirmButton", ButtonWidget("Confirm", drawSomething).setPos(5, 5).setParent(frame))
-
-#nameScreen.updateScreen()
-#root.mainloop()
