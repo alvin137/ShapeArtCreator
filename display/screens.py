@@ -5,19 +5,28 @@ from tkinter import Tk, IntVar, StringVar, colorchooser, Canvas, Frame, PhotoIma
 import animation
 from .drawing import *
 
-def changeScreen(a: Screen, b: Screen):
-    global t
-    a.clearScreen()
-    b.updateScreen()
+def changeToShapeScreen():
+    changeScreen(nameScreen, shapeScreen)
     animHandler.clear()
     animHandler.ask_again()
-    #animation.ask_again(canvas, root, dog_img) #type: ignore
     frame2.grid_remove()
-    #why removing
-    #t = turtle.RawTurtle(canvas)
-    #t.showturtle()
+    t.showturtle()
+
+def changeToNameScreen():
+    nameScreen.updateScreen()
+    animHandler.clear()
+    animHandler.ask_name()
+    canvas.unbind("<Button-1>")
+
+
+def changeScreen(a: Screen, b: Screen):
+    a.clearScreen()
+    b.updateScreen()
+    
 
 def drawSomething():
+    if t.isdown():
+        return
     shape = shapeScreen.getData("shapeOption").get()#type: ignore
     outline = shapeScreen.getData("shapeOutlineColor").get()#type: ignore
     fill = shapeScreen.getData("shapeFillColor").get()#type: ignore
@@ -51,19 +60,22 @@ canvas.grid(row= 0, column = 1)
 t = turtle.RawTurtle(canvas)
 t.speed(2)
 t.hideturtle()
+t.penup()
 
 dog_img = PhotoImage(file="dog.gif").subsample(10, 10) # type: ignore
 
 animHandler = animation.AnimationHandler(canvas, root, dog_img)
 
-animHandler.ask_name()
+animHandler.show_title()
+
+canvas.bind("<Button-1>", lambda e : changeToNameScreen())
 
 nameScreen.addWidget("nameLabel", LabelWidget("Name: ").setPos(0, 0).setParent(frame2))
 
 nameScreen.setData("name", StringVar())
 nameScreen.addWidget("nameEntry", EntryWidget(nameScreen.getData("name")).setPos(0, 1).setParent(frame2)) # type: ignore
 
-nameScreen.addWidget("okButton", ButtonWidget("Ok", lambda : changeScreen(nameScreen, shapeScreen)).setPos(1, 1).setParent(frame2))
+nameScreen.addWidget("okButton", ButtonWidget("Ok", lambda : changeToShapeScreen()).setPos(1, 1).setParent(frame2))
 
 shapeScreen.setData("shapeOption", StringVar())
 shapeScreen.setData("shapeOutlineColor", StringVar())
@@ -86,5 +98,5 @@ shapeScreen.addWidget("shapeSizeLabel", LabelWidget("Radius/Length: ").setPos(4,
 shapeScreen.addWidget("shapeSizeEntry", EntryWidget(shapeScreen.getData("shapeRadius")).setPos(4, 1).setParent(frame)) #type: ignore
 shapeScreen.addWidget("confirmButton", ButtonWidget("Confirm", drawSomething).setPos(5, 5).setParent(frame))
 
-nameScreen.updateScreen()
+#nameScreen.updateScreen()
 #root.mainloop()
